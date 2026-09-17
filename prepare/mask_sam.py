@@ -1,7 +1,4 @@
-"""Step 1: click-guided lip masks with Segment Anything.
-
-For every image in a person folder, show SAM's three candidate masks for a clicked point and save the chosen one
-as <image>.png next to the image. Masks are then cleaned with a Gaussian blur and re-binarized.
+"""Step 1. Click a point on the lips; keep one of SAM's three masks; save it as <image>.png.
 
     python prepare/mask_sam.py data/raw/<person> --checkpoint sam_vit_b_01ec64.pth
 """

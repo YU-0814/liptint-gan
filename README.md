@@ -1,6 +1,6 @@
 # Lip-tint transfer with pix2pix
 
-Apply the color of one lip tint (rom&nd Juicy Lasting Tint, Bare Grape) to a photo of bare lips. Course project, Artificial Intelligence, Pusan National University, June 2025. Report and slides (Korean) are in `report/`.
+Apply the color of one lip tint (rom&nd Juicy Lasting Tint, Bare Grape) to a photo of bare lips. Course project, Artificial Intelligence, Pusan National University, June 2025. The course report (Korean) is in `report/`.
 
 No paired photos of the same lips with and without the tint exist, so most of the work is building the paired dataset from tinted photos alone.
 
@@ -28,6 +28,8 @@ pix2pix as in Isola et al. (2017): U-Net generator (4 → 3 channels, 8 down / 8
 
 <p align="center"><img src="figures/loss_curves.png" width="560"></p>
 
+Loss curves over 200 epochs. G_GAN: generator adversarial loss; G_L1: 100·L1; G_Per: 10·perceptual; D: discriminator; Val_G_L1 / Val_G_Per: the same two terms on the validation set.
+
 ## Results
 
 Generated (left) vs. real tinted lips (right).
@@ -36,10 +38,6 @@ Generated (left) vs. real tinted lips (right).
 |---|---|---|
 | <img src="figures/result_seen_person.png" width="260"> | <img src="figures/result_new_person_lowres.png" width="260"> | <img src="figures/result_new_person_highres.png" width="260"> |
 
-The tint color and its intensity are reproduced. Three failure modes recur: lips look flat (highlights and volume are lost), the lip boundary is jagged, and a reddish cast spreads outside the lips. The black padding is also mistaken for skin near the border ([example](figures/padding_vs_outpainting.png)). Evaluation is visual only; no FID/SSIM.
+The dataset itself (third-party photos) and checkpoints are not in this repository. The tint color and its intensity are reproduced. Three failure modes recur: lips look flat (highlights and volume are lost), the lip boundary is jagged, and a reddish cast spreads outside the lips. The black padding is also mistaken for skin near the border ([example](figures/padding_vs_outpainting.png)). Evaluation is visual only; no FID/SSIM.
 
 The main limitation is the synthetic bare lip: HSV desaturation removes texture and volume together with the color, so the model never sees real bare-lip structure.
-
-## Not included
-
-The dataset (third-party photos) and checkpoints (218 MB per generator).

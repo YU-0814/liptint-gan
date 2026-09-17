@@ -1,9 +1,4 @@
-"""Step 4: pack pairs into the pix2pix layout.
-
-Every image is padded to a square with black borders (so lips are not distorted by resizing), resized to
-256x256, and written as
-    dataset/{train,val}/input/NNNNN.png   RGBA: bare lip + mask as alpha
-    dataset/{train,val}/target/NNNNN.png  RGB:  tinted lip
+"""Step 4. Pad to square, resize to 256, write input (bare lip RGB + mask alpha) and target (tinted RGB), split train/val.
 
     python prepare/build_pairs.py data/pairs data/dataset --val 0.2
 """

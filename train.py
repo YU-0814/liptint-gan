@@ -1,7 +1,6 @@
-"""Train pix2pix on data/dataset: LSGAN + lambda_l1 * L1 + lambda_perceptual * VGG loss.
+"""Train pix2pix: GAN + 100*L1 + 10*perceptual.
 
     python train.py data/dataset --epochs 200
-Writes checkpoints/, results/epochNNN_{fake,real}.png and figures/loss_curves.png.
 """
 import argparse
 import os
@@ -53,7 +52,7 @@ def main():
     gan_loss, l1_loss, perceptual = nn.MSELoss(), nn.L1Loss(), PerceptualLoss().to(device)
     opt_g = torch.optim.Adam(G.parameters(), lr=a.lr, betas=(0.5, 0.999))
     opt_d = torch.optim.Adam(D.parameters(), lr=a.lr, betas=(0.5, 0.999))
-    decay = lambda epoch: 1.0 - max(0, epoch - a.epochs // 2) / (a.epochs // 2)  # constant, then linear to 0
+    decay = lambda epoch: 1.0 - max(0, epoch - a.epochs // 2) / (a.epochs // 2)  # linear decay in the second half
     sched_g, sched_d = (torch.optim.lr_scheduler.LambdaLR(o, decay) for o in (opt_g, opt_d))
 
     log = {k: [] for k in ("G_GAN", "G_L1", "G_perceptual", "D", "val_L1", "val_perceptual")}

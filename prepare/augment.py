@@ -1,7 +1,4 @@
-"""Step 3: balance the dataset by augmenting every person up to N pairs.
-
-Some people have one photo, others twenty. Each person is topped up with translations (4 directions),
-a horizontal flip, a center zoom and two brightness shifts, applied identically to tinted, mask and bare.
+"""Step 3. Top every person up to N pairs with flips, zooms, shifts and brightness changes.
 
     python prepare/augment.py data/pairs --per-person 15
 """

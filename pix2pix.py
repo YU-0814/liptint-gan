@@ -1,4 +1,5 @@
-"""pix2pix (Isola et al., 2017): U-Net generator, 70x70 PatchGAN discriminator, VGG19 perceptual loss."""
+"""U-Net generator, 70x70 PatchGAN discriminator, VGG19 perceptual loss (Isola et al., 2017).
+"""
 import torch
 import torch.nn as nn
 from torchvision import models
@@ -19,7 +20,7 @@ def up(cin, cout, dropout=False):
 
 
 class UNetGenerator(nn.Module):
-    """256x256 input -> 1x1 bottleneck -> 256x256 output, with skip connections."""
+    """8 down, 8 up, skip connections."""
 
     def __init__(self, in_ch=4, out_ch=3, nf=64):
         super().__init__()
@@ -41,7 +42,7 @@ class UNetGenerator(nn.Module):
 
 
 class PatchDiscriminator(nn.Module):
-    """Classifies 70x70 patches of the (input, image) pair; output is a 30x30 map."""
+    """Real/fake score per 70x70 patch (30x30 output)."""
 
     def __init__(self, in_ch=4, out_ch=3, nf=64):
         super().__init__()
@@ -57,7 +58,7 @@ class PatchDiscriminator(nn.Module):
 
 
 class PerceptualLoss(nn.Module):
-    """L1 distance between VGG19 features at relu1_2, relu2_2 and relu3_2."""
+    """L1 between VGG19 features at relu1_2, relu2_2, relu3_2."""
 
     def __init__(self):
         super().__init__()

@@ -1,11 +1,6 @@
-"""Step 2: synthesize a bare-lip image for every tinted lip.
-
-Paired bare/tinted photos of the same person do not exist, so the bare lip is made from the tinted one:
-inside the mask, saturation and value are scaled down (less for already-dull pixels), specular highlights
-are filled with the mean lip color, and the result is blurred.
+"""Step 2. Make a bare-lip image from each tinted photo: desaturate and darken inside the mask, fill highlights, blur.
 
     python prepare/bare_lip.py data/raw data/pairs
-    data/raw/<person>/<name>.jpg + <name>.png  ->  data/pairs/<person>/<i>/{tinted.jpg, mask.png, bare.jpg}
 """
 import argparse
 from pathlib import Path
