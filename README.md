@@ -26,9 +26,6 @@ python train.py data/dataset --epochs 200
 
 pix2pix as in Isola et al. (2017): U-Net generator (4 → 3 channels, 8 down / 8 up), 70×70 PatchGAN discriminator, LSGAN objective. Loss = GAN + 100·L1 + 10·VGG19 perceptual, Adam 2e-4 (β₁ 0.5), batch 4, 200 epochs with linear decay after 100. The report describes the L1-only configuration; the code here is the last version that was run and includes the perceptual term.
 
-<p align="center"><img src="figures/loss_curves.png" width="560"></p>
-
-Loss curves over 200 epochs. G_GAN: generator adversarial loss; G_L1: 100·L1; G_Per: 10·perceptual; D: discriminator; Val_G_L1 / Val_G_Per: the same two terms on the validation set.
 
 ## Results
 

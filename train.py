@@ -55,14 +55,14 @@ def main():
     decay = lambda epoch: 1.0 - max(0, epoch - a.epochs // 2) / (a.epochs // 2)  # linear decay in the second half
     sched_g, sched_d = (torch.optim.lr_scheduler.LambdaLR(o, decay) for o in (opt_g, opt_d))
 
-    log = {k: [] for k in ("G_GAN", "G_L1", "G_perceptual", "D", "val_L1", "val_perceptual")}
+    log = {k: [] for k in ("G_GAN", "D", "L1", "perceptual", "val_L1", "val_perceptual")}
     for d in ("checkpoints", "results", "figures"):
         os.makedirs(d, exist_ok=True)
 
     for epoch in range(1, a.epochs + 1):
         G.train()
         D.train()
-        sums = dict.fromkeys(("G_GAN", "G_L1", "G_perceptual", "D"), 0.0)
+        sums = dict.fromkeys(("G_GAN", "D", "L1", "perceptual"), 0.0)
         for x, y in train_dl:
             x, y = x.to(device), y.to(device)
             real = torch.ones(x.size(0), 1, 30, 30, device=device)
@@ -80,7 +80,7 @@ def main():
             d_loss = 0.5 * (gan_loss(D(x, y), real) + gan_loss(D(x, y_hat.detach()), fake))
             d_loss.backward()
             opt_d.step()
-            for k, v in zip(sums, (g_gan, g_l1, g_per, d_loss), strict=True):
+            for k, v in zip(sums, (g_gan, d_loss, g_l1, g_per), strict=True):
                 sums[k] += v.item()
         sched_g.step()
         sched_d.step()
@@ -93,8 +93,8 @@ def main():
             for x, y in val_dl:
                 x, y = x.to(device), y.to(device)
                 y_hat = G(x)
-                val_l1 += l1_loss(y_hat, y).item()
-                val_per += perceptual(y_hat, y).item()
+                val_l1 += l1_loss(y_hat, y).item() * a.lambda_l1
+                val_per += perceptual(y_hat, y).item() * a.lambda_perceptual
         log["val_L1"].append(val_l1 / len(val_dl))
         log["val_perceptual"].append(val_per / len(val_dl))
         print(f"epoch {epoch:3d}  " + "  ".join(f"{k} {v[-1]:.3f}" for k, v in log.items()), flush=True)
@@ -108,14 +108,19 @@ def main():
             torch.save(G.state_dict(), f"checkpoints/G_epoch{epoch}.pth")
             torch.save(D.state_dict(), f"checkpoints/D_epoch{epoch}.pth")
 
-    plt.figure(figsize=(10, 6))
-    for k, v in log.items():
-        plt.plot(v, label=k, linestyle="--" if k.startswith("val") else "-")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig("figures/loss_curves.png")
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4.5))
+    for k in ("L1", "perceptual"):
+        ax1.plot(log[k], label=f"train {k}")
+        ax1.plot(log[f"val_{k}"], "--", label=f"val {k}")
+    ax1.set_title("Reconstruction terms (weighted)")
+    for k in ("G_GAN", "D"):
+        ax2.plot(log[k], label=k)
+    ax2.set_title("Adversarial terms")
+    for ax in (ax1, ax2):
+        ax.set_xlabel("Epoch")
+        ax.legend()
+    fig.tight_layout()
+    fig.savefig("figures/loss_curves.png")
 
 
 if __name__ == "__main__":
