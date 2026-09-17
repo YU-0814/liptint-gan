@@ -29,12 +29,10 @@ Standard pix2pix (Isola et al., 2017) with a 4-channel input: U-Net generator, 7
 
 ## Results
 
-Generated (left) vs. real tinted lips (right).
+Generated (left) vs. real tinted lips (right), on the validation split. The dataset (third-party photos) and checkpoints are not in this repository.
 
 | Person seen in training, new photo | New person, low resolution | New person, high resolution |
 |---|---|---|
 | <img src="figures/result_seen_person.png" width="260"> | <img src="figures/result_new_person_lowres.png" width="260"> | <img src="figures/result_new_person_highres.png" width="260"> |
 
-The dataset itself (third-party photos) and checkpoints are not in this repository. The tint color and its intensity are reproduced. Three failure modes recur: lips look flat (highlights and volume are lost), the lip boundary is jagged, and a reddish cast spreads outside the lips. The black padding is also mistaken for skin near the border ([example](figures/padding_vs_outpainting.png)). Evaluation is visual only; no FID/SSIM.
-
-The main limitation is the synthetic bare lip: HSV desaturation removes texture and volume together with the color, so the model never sees real bare-lip structure.
+Evaluation is visual only, on a handful of images; there is no FID/SSIM and no user study. What can be seen: the output takes on a color in the range of the product's tint, while highlights are mostly absent, the lip boundary is jagged, and some redness spills outside the lips. The black padding also affects the border region ([example](figures/padding_vs_outpainting.png)). A plausible cause is the synthetic bare lip, which loses texture together with color, but this was not tested.
