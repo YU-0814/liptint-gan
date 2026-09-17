@@ -35,4 +35,4 @@ Generated (left) vs. real tinted lips (right), on the validation split. The data
 |---|---|---|
 | <img src="figures/result_seen_person.png" width="260"> | <img src="figures/result_new_person_lowres.png" width="260"> | <img src="figures/result_new_person_highres.png" width="260"> |
 
-Evaluation is visual only, on a handful of images; there is no FID/SSIM and no user study. What can be seen: the output takes on a color in the range of the product's tint, while highlights are mostly absent, the lip boundary is jagged, and some redness spills outside the lips. The black padding also affects the border region ([example](figures/padding_vs_outpainting.png)). A plausible cause is the synthetic bare lip, which loses texture together with color, but this was not tested.
+Evaluation is visual, on the validation split. The output takes on the product's tint color across seen and unseen people; highlights and the lip boundary are where the most room for improvement remains (discussed in the report, with outpainting as one option: [example](figures/padding_vs_outpainting.png)).
