@@ -24,7 +24,7 @@ python train.py data/dataset --epochs 200
 
 ## Model (`pix2pix.py`, `train.py`)
 
-pix2pix as in Isola et al. (2017): U-Net generator (4 → 3 channels, 8 down / 8 up), 70×70 PatchGAN discriminator, LSGAN objective. Loss = GAN + 100·L1 + 10·VGG19 perceptual, Adam 2e-4 (β₁ 0.5), batch 4, 200 epochs with linear decay after 100. The report describes the L1-only configuration; the code here is the last version that was run and includes the perceptual term.
+Standard pix2pix (Isola et al., 2017) with a 4-channel input: U-Net generator, 70×70 PatchGAN, GAN + 100·L1 + 10·VGG perceptual, 200 epochs. The report describes the L1-only run; the code is the later version with the perceptual term.
 
 
 ## Results
