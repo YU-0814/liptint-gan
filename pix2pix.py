@@ -1,5 +1,4 @@
-"""U-Net generator, 70x70 PatchGAN discriminator, VGG19 perceptual loss (Isola et al., 2017).
-"""
+"""U-Net generator, 70x70 PatchGAN discriminator, VGG19 perceptual loss (Isola et al., 2017)."""
 import torch
 import torch.nn as nn
 from torchvision import models
